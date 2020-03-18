@@ -1,4 +1,4 @@
-function shape_proc(num,sz,rule,sym,draw,prnt)
+function [gene] = shape_proc(num,sz,rule,sym,draw,prnt)
 
 % Procedural random shape generator
 
