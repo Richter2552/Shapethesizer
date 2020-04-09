@@ -91,7 +91,7 @@ while ~isempty(target_buff)
         while (max([cell_list(:,1); target(1)]) - min([cell_list(:,1); target(1)])) == sz_r(1) || (max([cell_list(:,2); target(2)]) - min([cell_list(:,2); target(2)])) == sz_r(2)
             target_buff(1,:) = [];
             if isempty(target_buff)
-                shape_proc(num,sz,rule,sym,draw,prnt)
+                gene = shape_proc(num,sz,rule,sym,draw,prnt)
                 return
             end
             target = target_buff(1,:); % choose next position
@@ -161,7 +161,7 @@ end
 
 % check that the shape matches the desired size
 if (max(cell_list(:,1)) - min(cell_list(:,1))) < (sz_r(1)-1) || (max(cell_list(:,2)) - min(cell_list(:,2))) < (sz_r(2)-1)
-    shape_proc(num,sz,rule,sym,draw,prnt)
+    gene = shape_proc(num,sz,rule,sym,draw,prnt)
     return
 end
 
