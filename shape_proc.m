@@ -6,7 +6,7 @@ if any(sym & rem(sz,2))
     error('for this symmetry the size on this axis must be equal');
 end
 
-% Defineprimitives
+% Define primitives
 
 sqr.coord = [0 0 1 1; 0 1 1 0];
 sqr.area = 1;
