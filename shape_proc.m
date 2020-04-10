@@ -230,3 +230,7 @@ end
 
 gene = round(gene(:,:,1).*10 + gene_bi); % here we convert each shape (first digit) and orientation (second digit) to a unique identifier
 gene = flipud(gene'); % re-orient to a cartesian representation
+gene(gene==10)=1;
+gene(gene==11)=1;
+gene(gene==12)=1;
+gene(gene==13)=1;
