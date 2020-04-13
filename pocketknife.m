@@ -1,31 +1,40 @@
+
 clear all
-load sham_genes.mat % load a sham list of gene 
+s=24;% define the number of shapes
+n=1000;% define the number of iteration
+rule = {'relaxed', 'strict'};
+sym=[1,1;1,0;0,1;0,0];
+% create a set of "s" number of shapes randomising "rules" and "symmetries"
+for jj=1:s
+genes(:,:,jj)=shape_proc(jj,[4,4],rule(randi(2)),sym(randi(4),:),0,0);
+end
+vec=1:s;
+comb= nchoosek(vec,2);% % create all possible combinations of two from genes matrices 
 
-
-m=transpose(who);
-n=17;% define number of iteration
 
 for l=1:n
-    
-    comb= nchoosek(m,2);% create all possible combination of the matrices
-    
-    for j=1:size(m,2)
-        row(j,:) = vertcat(find(ismember(comb(:,1),m(j))),find(ismember(comb(:,2),m(j))));
+    %create a matrix indicating row numbers in which each element is
+    %present in comb e.g., second element in genes is present in row numbers
+    %row(2,:), third elements in row(3,:) in comb and so on
+    for j=1:s
+        row(j,:) = vertcat(find(ismember(comb(:,1),vec(j))),find(ismember(comb(:,2),vec(j))));
     end
     
     
-    
+    % take each pair of gene elements and evaluate similarity coefficient between them
+    % with or without flipping and rotating them
     for i=1:size(comb,1)
-        a=eval(comb{i,1});
-        b=eval(comb{i,2});
+        a= genes(:,:,comb(i,1));% first element
+        b= genes(:,:,comb(i,2));% second element
         
-        %evaluate similarity coefficient between two shapes
-        dv=(a-b);
-        dv(dv~=0)=1;
-        dv(:)=~dv;
-        v(1)=sum(sum(dv))/16;
+       
+        %evaluate similarity coefficient between two genes
+        dv=(a-b); 
+        dv(dv~=0)=1; % insert 1 in places where elements differ
+        dv(:)=~dv; % replaces 1 and 0
+        v(1)=sum(sum(dv))/16; % 
         
-        %rotate one image counterclockwise 90 degrees and evaluate similarity 
+        %rotate one first gene counterclockwise 90 degrees and evaluate similarity 
         a=rot90(a,1);
         dv=(a-b);
         dv(dv~=0)=1;
@@ -70,23 +79,29 @@ for l=1:n
     % the existing list
     mavg(l)=mean(vmax);
     
-    x=[mean(vmax(1,row(1,:))),mean(vmax(1,row(2,:))),mean(vmax(1,row(3,:))),mean(vmax(1,row(4,:)))];
+   
+    for ii=1:size(row,1)
+        c(ii)=mean(vmax(1,row(ii,:)));
+    end
     
+    [cul,icul]=max(c);% identify the culptit and its index. Incase there are multiple it identifies the first culprit
+    genes(:,:,icul)=shape_proc(1,[4,4],rule(randi(2)),sym(randi(4),:),0,0);% eliminate the culprit from the list
     
-    [cul,icul]=max(x);% identify the culptit and its index. Incase there are multiple it identifies the first culprit
-    m(icul)=[];% eliminate the culprit from the list
     
     clear row
     clear j
+    clear ii
+    clear c
 end
 % plot the iteration curve
 x=1:n;
 figure
 plot(x,mavg,'b--o')
-title('Decrease in the similarity among shapes with iterated removal of members')
+title('Change in the similarity coefficient among shapes with iterated replacement of members')
 xlabel('No. of Iteration')
 ylabel('Average Gene Value')
 pl = gca;
 pl.FontSize = 18;
 curtick = get(gca, 'xTick');
 xticks(unique(round(curtick)));
+

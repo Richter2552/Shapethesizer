@@ -19,8 +19,8 @@ if output.id > 1
     output.ori = round([cos(2*theta_rad) sin(2*theta_rad); sin(2*theta_rad) -cos(2*theta_rad)] * input.ori); % reflection of orientation vector
     % conversion of vector to a handy notation (0,1,2,3) = 0,90,180,270 degrees
     ori_id = mod(atan2(output.ori(2),output.ori(1)),2*pi);
-    output.ori_id = ori_id/(pi/2) - 0.5;
+    output.ori_id = ori_id/(pi/2);
 else
-    output.ori = input.ori;
+    output.ori = [1; 0];
     output.ori_id = 0;
 end

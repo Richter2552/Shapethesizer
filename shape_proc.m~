@@ -222,6 +222,10 @@ end
 
 gene = round(gene(:,:,1).*10 + gene(:,:,2)); % here we convert each shape (first digit) and orientation (second digit) to a unique identifier
 gene = flipud(gene'); % re-orient to a cartesian representation
+gene(gene==10)=1;
+gene(gene==11)=1;
+gene(gene==12)=1;
+gene(gene==13)=1;
 
 % set empty space to -1, so it will contribute to the correlation
 
